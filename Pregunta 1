@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Prueba 1</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      padding: 40px;
+    }
+    h1 {
+      font-size: 36px;
+      font-weight: bold;
+    }
+    .input-blank {
+      width: 100px;
+      padding: 5px;
+      text-align: center;
+    }
+    .popup {
+      display: none;
+      position: fixed;
+      top: 30%;
+      left: 50%;
+      transform: translate(-50%, -30%);
+      background-color: white;
+      padding: 30px;
+      border: 3px solid black;
+      box-shadow: 0 0 15px rgba(0,0,0,0.5);
+      z-index: 1000;
+    }
+    .success {
+      color: green;
+    }
+    .error {
+      color: red;
+    }
+    #overlay {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background-color: rgba(0,0,0,0.5);
+      display: none;
+      z-index: 999;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Prueba 1</h1>
+  <p>
+    Un escape room es un juego de aventura físico o virtual en el que un grupo de personas queda "encerrado" en una habitación temática y debe resolver una serie de 
+    <input class="input-blank" id="input1" maxlength="15">,
+    rompecabezas y desafíos para poder 
+    <input class="input-blank" id="input2" maxlength="15">
+    antes de que se agote un 
+    <input class="input-blank" id="input3" maxlength="15"> límite.
+  </p>
+  <br>
+  <button onclick="checkAnswers()">Verificar</button>
+
+  <div id="overlay"></div>
+
+  <!-- Success popup -->
+  <div class="popup" id="successPopup">
+    <h2 class="success">¡Enhorabuena!</h2>
+    <p>Pasas a la siguiente prueba.</p>
+    <button onclick="location.href='prueba2.html'">Ir a Prueba 2</button>
+  </div>
+
+  <!-- Error popup -->
+  <div class="popup" id="errorPopup">
+    <h2 class="error">¡Vuelve a intentarlo!</h2>
+    <p>Debes acertar todas para pasar a la siguiente prueba.</p>
+    <button onclick="closeError()">Cerrar</button>
+  </div>
+
+  <script>
+    const correctAnswers = ["problemas", "escapar", "tiempo"];
+    const inputs = [
+      document.getElementById("input1"),
+      document.getElementById("input2"),
+      document.getElementById("input3")
+    ];
+
+    function checkAnswers() {
+      let allCorrect = true;
+
+      inputs.forEach((input, index) => {
+        const value = input.value.trim().toLowerCase();
+        if (value === correctAnswers[index]) {
+          input.disabled = true;
+        } else {
+          allCorrect = false;
+        }
+      });
+
+      if (allCorrect) {
+        document.getElementById("overlay").style.display = "block";
+        document.getElementById("successPopup").style.display = "block";
+      } else {
+        inputs.forEach((input, index) => {
+          if (input.value.trim().toLowerCase() !== correctAnswers[index]) {
+            input.value = "";
+            input.disabled = false;
+          }
+        });
+        document.getElementById("overlay").style.display = "block";
+        document.getElementById("errorPopup").style.display = "block";
+      }
+    }
+
+    function closeError() {
+      document.getElementById("overlay").style.display = "none";
+      document.getElementById("errorPopup").style.display = "none";
+    }
+  </script>
+</body>
+</html>
+
